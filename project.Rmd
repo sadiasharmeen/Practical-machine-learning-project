@@ -26,12 +26,12 @@ This project is based on the dataset provided by [http://groupware.les.inf.puc-r
 
 We will follow these steps:
 
-- Process the data, for use of this project
-- Explore the data, especially focussing on the two paramaters we are interested in 
-- Model selection, where we try different models to help us answer our questions
-- Model examination, to see wether our best model holds up to our standards
-- A Conclusion where we answer the questions based on the data
-- Predicting the classification of the model on test set
+- Process the data to use in this project
+- Explore the data and focus on the two parameters of interest
+- Model selection and try different model to find out the answers to our questions
+- Model examination, to check wether our best model holds up to our standards
+- Draw a Conclusion to we answer the questions based on the data
+- Predict the classification of the model on the test set
 
 ## Processing
 
@@ -61,7 +61,7 @@ dim(training.raw)
 ```
 
 
-What we see is a lot of data with NA / empty values. Let's remove those
+Let's remove the data with NA / empty values
 
 ```{r}
 maxNAPerc = 20
@@ -151,8 +151,7 @@ excludeColumns <- c(highlyCorrelated, classeIndex)
 corrplot(correlationMatrix, method="color", type="lower", order="hclust", tl.cex=0.70, tl.col="black", tl.srt = 45, diag = FALSE)
 ```
 
-We see that there are some features that aree quite correlated with each other.
-We will have a model with these excluded. Also we'll try and reduce the features by running PCA on all and the excluded subset of the features
+We see that some features are quite correlated with each other. We will create a model with these excluded. Then, we'll try and reduce the features by running PCA on all and the excluded subset of the features
 
 ```{r}
 pcaPreProcess.all <- preProcess(training.subSetTrain[, -classeIndex], method = "pca", thresh = 0.99)
@@ -254,14 +253,14 @@ paste0("Accuracy on testing: ",rfMod.pca.subset.testing.acc)
 
 ## Conclusion
 
-This concludes that nor PCA doesn't have a positive of the accuracy (or the process time for that matter)
+This concludes that nor PCA doesn't have a positive accuracy (or the process time for that matter)
 The `rfMod.exclude` perform's slightly better then the 'rfMod.cleaned'
 
 We'll stick with the `rfMod.exclude` model as the best model to use for predicting the test set.
-Because with an accuracy of 98.7% and an estimated OOB error rate of 0.23% this is the best model.
+Because with an accuracy of 98.7% and an estimated OOB error rate of 0.23%, this is the best model.
 
 
-Before doing the final prediction we will examine the chosen model more in depth using some plots
+Before doing the final prediction we will examine the chosen model more in-depth using some plots
 
 ```{r}
 par(mfrow=c(1,2)) 
@@ -270,7 +269,7 @@ plot(rfMod.exclude, , cex=0.7, main='Error vs No. of trees plot')
 par(mfrow=c(1,1)) 
 ```
 
-To really look in depth at the distances between predictions we can use MDSplot and cluster predictiosn and results
+To really look in depth at the distances between predictions we can use MDSplot and cluster prediction and results
 
 ```{r}
 start <- proc.time()
@@ -312,5 +311,5 @@ predictions <- t(cbind(
 predictions
 ```
 
-The predictions don't really change a lot with each model, but since we have most faith in the `rfMod.exclude`, we'll keep that as final answer. 
+The predictions don't change a lot with each model, but since we have the most faith in the `rfMod.exclude`, we'll keep that as the final answer. 
 
